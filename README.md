@@ -38,6 +38,7 @@ Page(VueLike({
 ### 混入
 DemoPage.js:
 ```js
+const VueLike = require('miniprogram-vue-like-page')
 Page(VueLike({
     data: {
         contentInput: '',
