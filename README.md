@@ -2,7 +2,7 @@
 微信小程序js库。使小程序的Page代码支持Vue的一些特性。
 ## 安装
 
-### npm安装
+### 方法一：npm安装
 ```bash
 npm install --save miniprogram-vue-like-page
 ```
@@ -10,7 +10,7 @@ npm install --save miniprogram-vue-like-page
 ```js
 const VueLike = require('miniprogram-vue-like-page')
 ```
-### 直接下载 
+### 方法二：直接下载 
 下载 miniprogram-vue-like-page.js 文件到小程序目录中，代码中引入js文件
 
 ```js
