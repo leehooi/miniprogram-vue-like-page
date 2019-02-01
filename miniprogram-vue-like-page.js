@@ -10,9 +10,12 @@ module.exports = function (page) {
                 return;
             }
             for (let property in newData) {
+                if (oldData[property] === newData[property]) {
+                    continue;
+                }
                 watchFnList = this.watchFnTable[property];
                 if (!watchFnList || watchFnList.length == 0) {
-                    return;
+                    continue;
                 }
                 watchFnList.forEach(fn => {
                     fn(newData[property], oldData[property]);
@@ -38,7 +41,7 @@ module.exports = function (page) {
                 var oldDataJson = JSON.stringify(this.data);
                 ctx.setData.apply(this, arguments);
                 ctx.updateComputedProperties(this);
-                ctx.notifyWatch(JSON.parse(oldDataJson), arguments[0]);
+                ctx.notifyWatch(JSON.parse(oldDataJson), this.data);
             }
 
             //update Computed Properties immediately
