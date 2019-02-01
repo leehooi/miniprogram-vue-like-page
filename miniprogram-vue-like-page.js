@@ -13,7 +13,7 @@ module.exports = function (page) {
                 if (oldData[property] === newData[property]) {
                     continue;
                 }
-                watchFnList = this.watchFnTable[property];
+                var watchFnList = this.watchFnTable[property];
                 if (!watchFnList || watchFnList.length == 0) {
                     continue;
                 }
@@ -47,7 +47,7 @@ module.exports = function (page) {
             //update Computed Properties immediately
             ctx.updateComputedProperties(this);
         }
-    }].concat(page.mixins || []).forEach(mixin => {
+    }].concat(getApp().mixins || []).concat(page.mixins || []).forEach(mixin => {
         for (let key in mixin) {
             if (ctx.lifeFnTable[key]) {
                 ctx.lifeFnTable[key].push(mixin[key]);

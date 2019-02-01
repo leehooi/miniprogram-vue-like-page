@@ -1,5 +1,4 @@
 const assert = require('assert');
-const Page = require('./page');
 const VueLike = require('../miniprogram-vue-like-page');
 describe('mixin', function () {
     describe('lifecycle callback', function () {
@@ -34,7 +33,12 @@ describe('mixin', function () {
             page.onShow();
 
             assert.equal(outputs.join('|'),
-                'minxin 1 onLoad|minxin 2 onLoad|page 2 onLoad|minxin 1 onShow|minxin 2 onShow|page 2 onShow')
+                'minxin 1 onLoad|' +
+                'minxin 2 onLoad|' +
+                'page 2 onLoad|' +
+                'minxin 1 onShow|' +
+                'minxin 2 onShow|' +
+                'page 2 onShow')
         });
     });
     describe('method', function () {
@@ -206,15 +210,45 @@ describe('mixin', function () {
                     }
                 },
                 onLoad: function (options) {
-                    this.setData({number1: 2})
+                    this.setData({ number1: 2 })
                 }
             }));
             page.onLoad();
-            page.setData({number1: 3})
-            
+            page.setData({ number1: 3 })
+
             assert.equal(outputs.join('|'),
                 'mixin detected change from 1 to 2|page change from 1 to 2|' +
                 'mixin detected change from 2 to 3|page change from 2 to 3')
+        });
+    });
+    describe('global mixin', function () {
+        it('should be merged at first', () => {
+            var outputs = [];
+            setApp({
+                mixins: [
+                    {
+                        onLoad: function (options) {
+                            outputs.push('global minxin onLoad')
+                        }
+                    }]
+            })
+            var page = Page(VueLike({
+                mixins: [
+                    {
+                        onLoad: function (options) {
+                            outputs.push('local minxin onLoad')
+                        }
+                    }],
+                onLoad: function (options) {
+                    outputs.push('page onLoad')
+                }
+            }));
+            page.onLoad();
+
+            assert.equal(outputs.join('|'),
+                'global minxin onLoad|' +
+                'local minxin onLoad|' +
+                'page onLoad')
         });
     });
 });
