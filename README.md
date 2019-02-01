@@ -50,7 +50,7 @@ Page(VueLike({
 ```
 
 ### 侦听器
-类似Vue的watch。用来观察和响应data属性数据变动。
+类似Vue的watch。用来观察和响应data属性和计算属性数据的变动。
 ```js
 Page(VueLike({
     data: {
