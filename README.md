@@ -95,12 +95,18 @@ Page(VueLike({
 ```
 
 #### 普通函数和属性合并
+Page中可以把混入的函数和属性当作Page自己已经定义的函数和属性来使用。
 当Page和混入对象含有同名属性时，取Page的属性。
 
 #### 生命周期回调函数合并
 小程序的页面[生命周期回调函数](https://developers.weixin.qq.com/miniprogram/dev/framework/app-service/page.html#%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%E5%9B%9E%E8%B0%83%E5%87%BD%E6%95%B0)有`onLoad`, `onShow`, `onReady`, `onHide`, `onUnload`。
 
-同名生命周期回调函数将混合为一个数组，因此都将被调用。另外，混入对象的回调函数将在Page自身回调函数*之前*调用。
+同名生命周期回调函数将混合为一个数组，因此都将被调用。另外，混入对象的回调函数将在Page自身回调函数**之前**调用。
 
-#### data，computed 属性对象合并
+#### data，computed属性对象合并
+混入的data，computed属性将会与Page的data，computed属性合并。
 当Page和混入对象的data，computed对象含有同名属性时，取Page的属性。
+
+#### watch对象合并
+混入的watch属性将会与Page的watch属性合并。
+当Page和混入对象的watch对象含有同名属性时，检测到数据变动时都会被调用。另外，混入对象的侦听函数将在Page自身侦听函数**之前**调用。
