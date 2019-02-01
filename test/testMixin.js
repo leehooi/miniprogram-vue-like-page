@@ -37,7 +37,7 @@ describe('mixin', function () {
                 'minxin 1 onLoad|minxin 2 onLoad|page 2 onLoad|minxin 1 onShow|minxin 2 onShow|page 2 onShow')
         });
     });
-    describe('common method', function () {
+    describe('method', function () {
         it('should be merged', () => {
             var outputs = [];
             var page = Page(VueLike({
@@ -101,14 +101,88 @@ describe('mixin', function () {
     });
     describe('data object', function () {
         it('should be merged', () => {
+            var page = Page(VueLike({
+                mixins: [
+                    {
+                        data: {
+                            propery2: 'mixin propery2'
+                        }
+                    }],
+                data: {
+                    propery1: 'page propery1'
+                }
+            }));
+            page.onLoad();
+            assert.equal(page.data.propery1, 'page propery1')
+            assert.equal(page.data.propery2, 'mixin propery2')
         });
         it('should be overwriten by Page', () => {
+            var page = Page(VueLike({
+                mixins: [
+                    {
+                        data: {
+                            propery1: 'mixin propery1',
+                            propery2: 'mixin propery2'
+                        }
+                    }],
+                data: {
+                    propery1: 'page propery1'
+                }
+            }));
+            page.onLoad();
+            assert.equal(page.data.propery1, 'page propery1')
+            assert.equal(page.data.propery2, 'mixin propery2')
         });
     });
     describe('computed object', function () {
         it('should be merged', () => {
+            var page = Page(VueLike({
+                mixins: [
+                    {
+                        computed: {
+                            contentComputed2: function () {
+                                return this.data.content + ' computed by mixin'
+                            }
+                        }
+                    }],
+                data: {
+                    content: 'test content'
+                },
+                computed: {
+                    contentComputed1: function () {
+                        return this.data.content + ' computed by page'
+                    }
+                }
+            }));
+            page.onLoad();
+            assert.equal(page.data.contentComputed1, 'test content computed by page')
+            assert.equal(page.data.contentComputed2, 'test content computed by mixin')
         });
         it('should be overwriten by Page', () => {
+            var page = Page(VueLike({
+                mixins: [
+                    {
+                        computed: {
+                            contentComputed1: function () {
+                                return this.data.content + ' computed by mixin'
+                            },
+                            contentComputed2: function () {
+                                return this.data.content + ' computed by mixin'
+                            }
+                        }
+                    }],
+                data: {
+                    content: 'test content'
+                },
+                computed: {
+                    contentComputed1: function () {
+                        return this.data.content + ' computed by page'
+                    }
+                }
+            }));
+            page.onLoad();
+            assert.equal(page.data.contentComputed1, 'test content computed by page')
+            assert.equal(page.data.contentComputed2, 'test content computed by mixin')
         });
     });
 });
