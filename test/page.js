@@ -4,6 +4,5 @@ module.exports = page => {
             page.data[key] = obj[key];
         }
     };
-    page.onLoad();
     return page;
 }
