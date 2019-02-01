@@ -110,3 +110,29 @@ Page中可以把混入的函数和属性当作Page自己已经定义的函数和
 #### watch对象合并
 混入的watch属性将会与Page的watch属性合并。
 当Page和混入对象的watch对象含有同名属性时，检测到数据变动时都会被调用。另外，混入对象的侦听函数将在Page自身侦听函数**之前**调用。
+
+#### 全局混入
+在app.js文件中定义混入对象来注册全局混入对象。
+```js
+App({
+    onLaunch: function () {
+        console.log('App Launch')
+    },
+    onShow: function () {
+        console.log('App Show')
+    },
+    onHide: function () {
+        console.log('App Hide')
+    },
+    globalData: {
+        hasLogin: false
+    },
+    mixins: [
+        {
+            onLoad() {
+                console.log('global mixin')
+            }
+        }
+    ]
+});
+```
