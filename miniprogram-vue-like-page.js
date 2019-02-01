@@ -33,6 +33,14 @@ module.exports = function (page) {
                 ctx.lifeFnTable[key].push(mixin[key]);
             }
             else if (key == 'data' || key == 'computed' || key == 'watch') {
+                if (!page[key]) {
+                    page[key] = mixin[key];
+                }
+                for (let property in mixin[key]) {
+                    if (!page[key][property]) {
+                        page[key][property] = mixin[key][property];
+                    }
+                }
             }
             else {
                 if (!page[key]) {

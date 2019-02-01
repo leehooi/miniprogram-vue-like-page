@@ -2,7 +2,7 @@ const assert = require('assert');
 const Page = require('./page');
 const VueLike = require('../miniprogram-vue-like-page');
 describe('computed', function () {
-    it('Should return correct result', async () => {
+    it('Should return correct result', () => {
         var page = Page(VueLike({
             data: {
                 number1: 1
