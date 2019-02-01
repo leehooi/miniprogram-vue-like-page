@@ -4,6 +4,21 @@ module.exports = function (page) {
         setData: null,
         lifeFnTable: ['onLoad', 'onShow', 'onReady', 'onHide', 'onUnload']
             .reduce((table, fn) => { table[fn] = []; return table; }, {}),
+        watchFnTable: {},
+        notifyWatch: function (oldData, newData) {
+            if (!newData) {
+                return;
+            }
+            for (let property in newData) {
+                watchFnList = this.watchFnTable[property];
+                if (!watchFnList || watchFnList.length == 0) {
+                    return;
+                }
+                watchFnList.forEach(fn => {
+                    fn(newData[property], oldData[property]);
+                })
+            }
+        },
         updateComputedProperties: function (instance) {
             if (instance.computed) {
                 var computedData = {};
@@ -20,8 +35,10 @@ module.exports = function (page) {
             //inject setData fn.
             ctx.setData = this.setData;
             this.setData = function () {
-                ctx.setData.apply(this, arguments)
+                var oldDataJson = JSON.stringify(this.data);
+                ctx.setData.apply(this, arguments);
                 ctx.updateComputedProperties(this);
+                ctx.notifyWatch(JSON.parse(oldDataJson), arguments[0]);
             }
 
             //update Computed Properties immediately
@@ -32,7 +49,7 @@ module.exports = function (page) {
             if (ctx.lifeFnTable[key]) {
                 ctx.lifeFnTable[key].push(mixin[key]);
             }
-            else if (key == 'data' || key == 'computed' || key == 'watch') {
+            else if (key == 'data' || key == 'computed') {
                 if (!page[key]) {
                     page[key] = mixin[key];
                 }
@@ -40,6 +57,12 @@ module.exports = function (page) {
                     if (!page[key][property]) {
                         page[key][property] = mixin[key][property];
                     }
+                }
+            }
+            else if (key == 'watch') {
+                for (let property in mixin[key]) {
+                    ctx.watchFnTable[property] = ctx.watchFnTable[property] || [];
+                    ctx.watchFnTable[property].push(mixin[key][property]);
                 }
             }
             else {
@@ -50,19 +73,31 @@ module.exports = function (page) {
         }
     });
 
+    //append page watch functions
+    if (page.watch) {
+        for (let property in page.watch) {
+            ctx.watchFnTable[property] = ctx.watchFnTable[property] || [];
+            ctx.watchFnTable[property].push(page.watch[property]);
+        }
+    }
+
+    //append page life functions
+    for (let fn in ctx.lifeFnTable) {
+        if (page[fn]) {
+            //page function will be invoked after mixin ones.
+            let fnList = ctx.lifeFnTable[fn];
+            fnList.push(page[fn]);
+        }
+    }
+
     //inject page life functions
     for (let fn in ctx.lifeFnTable) {
-        let hooks = ctx.lifeFnTable[fn];
+        let fnList = ctx.lifeFnTable[fn];
 
-        if (page[fn]) {
-            //page hook will be invoked after mixin ones.
-            hooks.push(page[fn]);
-        }
-
-        if (hooks.length > 0) {
+        if (fnList.length > 0) {
             page[fn] = function () {
-                hooks.forEach(hook => {
-                    hook.apply(this, arguments);
+                fnList.forEach(fnItem => {
+                    fnItem.apply(this, arguments);
                 })
             }
         }

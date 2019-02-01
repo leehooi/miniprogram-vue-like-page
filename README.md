@@ -51,6 +51,20 @@ Page(VueLike({
 
 ### 侦听器
 类似Vue的watch。用来观察和响应data属性数据变动。
+```js
+Page(VueLike({
+    data: {
+        number1: 1
+    },
+    watch: {
+        number1: function (newVal, oldVal) {
+        }
+    },
+    onLoad: function (options) {
+        this.setData({ number1: 2 }) //这里会触发watch中的number1方法，传入的参数newVal是2，oldVal是1
+    }
+}));
+```
 
 ### 混入
 类似Vue的混入。所有混入对象的属性将被混入该Page本身的属性。

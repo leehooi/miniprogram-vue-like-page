@@ -2,7 +2,7 @@ const assert = require('assert');
 const Page = require('./page');
 const VueLike = require('../miniprogram-vue-like-page');
 describe('mixin', function () {
-    describe('lifecycle callbacks', function () {
+    describe('lifecycle callback', function () {
         it('should be invoked sequentialy', () => {
             var outputs = [];
             var page = Page(VueLike({
@@ -99,7 +99,7 @@ describe('mixin', function () {
             assert.equal(outputs.join('|'), 'minxin 1 method2')
         });
     });
-    describe('data object', function () {
+    describe('data', function () {
         it('should be merged', () => {
             var page = Page(VueLike({
                 mixins: [
@@ -134,7 +134,7 @@ describe('mixin', function () {
             assert.equal(page.data.propery2, 'mixin propery2')
         });
     });
-    describe('computed object', function () {
+    describe('computed', function () {
         it('should be merged', () => {
             var page = Page(VueLike({
                 mixins: [
@@ -183,6 +183,38 @@ describe('mixin', function () {
             page.onLoad();
             assert.equal(page.data.contentComputed1, 'test content computed by page')
             assert.equal(page.data.contentComputed2, 'test content computed by mixin')
+        });
+    });
+    describe('watch', function () {
+        it('should be merged', () => {
+            var outputs = [];
+            var page = Page(VueLike({
+                mixins: [
+                    {
+                        watch: {
+                            number1: function (newVal, oldVal) {
+                                outputs.push(`mixin detected change from ${oldVal} to ${newVal}`)
+                            }
+                        },
+                    }],
+                data: {
+                    number1: 1
+                },
+                watch: {
+                    number1: function (newVal, oldVal) {
+                        outputs.push(`page change from ${oldVal} to ${newVal}`)
+                    }
+                },
+                onLoad: function (options) {
+                    this.setData({number1: 2})
+                }
+            }));
+            page.onLoad();
+            page.setData({number1: 3})
+            
+            assert.equal(outputs.join('|'),
+                'mixin detected change from 1 to 2|page change from 1 to 2|' +
+                'mixin detected change from 2 to 3|page change from 2 to 3')
         });
     });
 });
