@@ -22,7 +22,7 @@ const VueLike = require('path_to_lib/miniprogram-vue-like-page')
 ### 计算属性
 当调用setData设置数据时，会自动计算computed中定义的属性值。
 
-在DemoPage.js中定义一个Page使用计算属性
+在DemoPage.js中定义一个Page并使用计算属性
 ```js
 const VueLike = require('miniprogram-vue-like-page')
 Page(VueLike({
@@ -41,8 +41,7 @@ Page(VueLike({
     }
 }));
 ```
-页面中输出计算属性
-DemoPage.wxml
+页面DemoPage.wxml中输出计算属性
 ```html
     <view>
         {{number2}}
