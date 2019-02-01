@@ -79,5 +79,6 @@ Page(VueLike({
 }));
 ```
 #### 生命周期回调函数合并
-生命周期函数包括`onLoad`, `onShow`, `onReady`, `onHide`, `onUnload`
+生命周期函数包括`onLoad`, `onShow`, `onReady`, `onHide`, `onUnload`。
+
 同名生命周期回调函数将混合为一个数组，因此都将被调用。另外，混入对象的回调函数将在Page自身回调函数*之前*调用。
