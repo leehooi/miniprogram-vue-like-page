@@ -53,13 +53,11 @@ Page(VueLike({
 类似Vue的watch。用来观察和响应data属性数据变动。
 
 ### 混入
-类似Vue的混入。所有混入对象的选项将被混入该Page本身的选项。
+类似Vue的混入。所有混入对象的属性将被混入该Page本身的属性。
 
 在sample_mixin.js文件中定义一个混入对象：
 ```js
 module.exports = {
-    onLoad: function (options) {
-    },
     bindTap: function (e) {
         this.setData({contentInput : 'set by mixin'})
     }
@@ -86,7 +84,7 @@ Page(VueLike({
 当Page和混入对象含有同名属性时，取Page的属性。
 
 #### 生命周期回调函数合并
-生命周期函数包括`onLoad`, `onShow`, `onReady`, `onHide`, `onUnload`。
+小程序的页面[生命周期回调函数](https://developers.weixin.qq.com/miniprogram/dev/framework/app-service/page.html#%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%E5%9B%9E%E8%B0%83%E5%87%BD%E6%95%B0)有`onLoad`, `onShow`, `onReady`, `onHide`, `onUnload`。
 
 同名生命周期回调函数将混合为一个数组，因此都将被调用。另外，混入对象的回调函数将在Page自身回调函数*之前*调用。
 
