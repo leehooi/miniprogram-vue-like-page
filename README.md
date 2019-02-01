@@ -96,7 +96,7 @@ Page(VueLike({
 
 #### 普通函数和属性合并
 Page中可以把混入的函数和属性当作Page自己已经定义的函数和属性来使用。
-当Page和混入对象含有同名属性时，取Page的属性。
+当Page和混入对象含有同名函数或属性时，取Page的函数或属性。
 
 #### 生命周期回调函数合并
 小程序的页面[生命周期回调函数](https://developers.weixin.qq.com/miniprogram/dev/framework/app-service/page.html#%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%E5%9B%9E%E8%B0%83%E5%87%BD%E6%95%B0)有`onLoad`, `onShow`, `onReady`, `onHide`, `onUnload`。
