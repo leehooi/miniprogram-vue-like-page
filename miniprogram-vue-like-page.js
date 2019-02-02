@@ -5,7 +5,7 @@ module.exports = function (page) {
         lifeFnTable: ['onLoad', 'onShow', 'onReady', 'onHide', 'onUnload']
             .reduce((table, fn) => { table[fn] = []; return table; }, {}),
         watchFnTable: {},
-        notifyWatch: function (oldData, newData) {
+        notifyWatch: function (instance, oldData, newData) {
             if (!newData) {
                 return;
             }
@@ -18,7 +18,7 @@ module.exports = function (page) {
                     continue;
                 }
                 watchFnList.forEach(fn => {
-                    fn(newData[property], oldData[property]);
+                    fn.apply(instance, [newData[property], oldData[property]]);
                 })
             }
         },
@@ -41,7 +41,7 @@ module.exports = function (page) {
                 var oldDataJson = JSON.stringify(this.data);
                 ctx.setData.apply(this, arguments);
                 ctx.updateComputedProperties(this);
-                ctx.notifyWatch(JSON.parse(oldDataJson), this.data);
+                ctx.notifyWatch(this, JSON.parse(oldDataJson), this.data);
             }
 
             //update Computed Properties immediately

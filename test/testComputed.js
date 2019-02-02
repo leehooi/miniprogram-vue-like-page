@@ -8,10 +8,12 @@ describe('computed', function () {
             },
             computed: {
                 number2: function () {
+                    assert.ok(this.data)
                     return this.data.number1 + 1;
                 }
             },
             onLoad: function (options) {
+                assert.ok(this.data)
                 assert.equal(this.data.number2, 2)
                 this.setData({number1: 2})
                 assert.equal(this.data.number2, 3)

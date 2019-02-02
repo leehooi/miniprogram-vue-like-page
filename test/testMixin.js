@@ -5,27 +5,34 @@ describe('mixin', function () {
         it('should be invoked sequentialy', () => {
             var outputs = [];
             var page = Page(VueLike({
+                data: {},
                 mixins: [
                     {
                         onLoad: function () {
+                            assert.ok(this.data)
                             outputs.push('minxin 1 onLoad')
                         },
                         onShow: function () {
+                            assert.ok(this.data)
                             outputs.push('minxin 1 onShow')
                         }
                     },
                     {
                         onLoad: function () {
+                            assert.ok(this.data)
                             outputs.push('minxin 2 onLoad')
                         },
                         onShow: function () {
+                            assert.ok(this.data)
                             outputs.push('minxin 2 onShow')
                         }
                     }],
                 onLoad: function (options) {
+                    assert.ok(this.data)
                     outputs.push('page 2 onLoad')
                 },
                 onShow: function () {
+                    assert.ok(this.data)
                     outputs.push('page 2 onShow')
                 }
             }));
@@ -45,18 +52,22 @@ describe('mixin', function () {
         it('should be merged', () => {
             var outputs = [];
             var page = Page(VueLike({
+                data: {},
                 mixins: [
                     {
                         method2: function () {
+                            assert.ok(this.data)
                             outputs.push('minxin 1 method2')
                         }
                     },
                     {
                         method2: function () {
+                            assert.ok(this.data)
                             outputs.push('minxin 2 method2')
                         }
                     }],
                 method1: function () {
+                    assert.ok(this.data)
                     outputs.push('page method1')
                 }
             }));
@@ -72,24 +83,30 @@ describe('mixin', function () {
         it('should be overwriten by Page', () => {
             var outputs = [];
             var page = Page(VueLike({
+                data: {},
                 mixins: [
                     {
                         method1: function () {
+                            assert.ok(this.data)
                             outputs.push('minxin 1 method1')
                         },
                         method2: function () {
+                            assert.ok(this.data)
                             outputs.push('minxin 1 method2')
                         }
                     },
                     {
                         method1: function () {
+                            assert.ok(this.data)
                             outputs.push('minxin 2 method1')
                         },
                         method2: function () {
+                            assert.ok(this.data)
                             outputs.push('minxin 2 method2')
                         }
                     }],
                 method1: function () {
+                    assert.ok(this.data)
                     outputs.push('page method1')
                 }
             }));
@@ -145,6 +162,7 @@ describe('mixin', function () {
                     {
                         computed: {
                             contentComputed2: function () {
+                                assert.ok(this.data)
                                 return this.data.content + ' computed by mixin'
                             }
                         }
@@ -154,6 +172,7 @@ describe('mixin', function () {
                 },
                 computed: {
                     contentComputed1: function () {
+                        assert.ok(this.data)
                         return this.data.content + ' computed by page'
                     }
                 }
@@ -168,9 +187,11 @@ describe('mixin', function () {
                     {
                         computed: {
                             contentComputed1: function () {
+                                assert.ok(this.data)
                                 return this.data.content + ' computed by mixin'
                             },
                             contentComputed2: function () {
+                                assert.ok(this.data)
                                 return this.data.content + ' computed by mixin'
                             }
                         }
@@ -180,6 +201,7 @@ describe('mixin', function () {
                 },
                 computed: {
                     contentComputed1: function () {
+                        assert.ok(this.data)
                         return this.data.content + ' computed by page'
                     }
                 }
@@ -197,6 +219,7 @@ describe('mixin', function () {
                     {
                         watch: {
                             number1: function (newVal, oldVal) {
+                                assert.ok(this.data)
                                 outputs.push(`mixin detected change from ${oldVal} to ${newVal}`)
                             }
                         },
@@ -206,10 +229,12 @@ describe('mixin', function () {
                 },
                 watch: {
                     number1: function (newVal, oldVal) {
+                        assert.ok(this.data)
                         outputs.push(`page change from ${oldVal} to ${newVal}`)
                     }
                 },
                 onLoad: function (options) {
+                    assert.ok(this.data)
                     this.setData({ number1: 2 })
                 }
             }));
@@ -228,18 +253,22 @@ describe('mixin', function () {
                 mixins: [
                     {
                         onLoad: function (options) {
+                            assert.ok(this.data)
                             outputs.push('global minxin onLoad')
                         }
                     }]
             })
             var page = Page(VueLike({
+                data: {},
                 mixins: [
                     {
                         onLoad: function (options) {
+                            assert.ok(this.data)
                             outputs.push('local minxin onLoad')
                         }
                     }],
                 onLoad: function (options) {
+                    assert.ok(this.data)
                     outputs.push('page onLoad')
                 }
             }));

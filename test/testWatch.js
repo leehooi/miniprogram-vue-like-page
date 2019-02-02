@@ -11,12 +11,15 @@ describe('watch', function () {
             },
             watch: {
                 noSuchProperty: function (newVal, oldVal) {
+                    assert.ok(this.data)
                     outputs.push(`noSuchProperty change from ${oldVal} to ${newVal}`)
                 },
                 number1: function (newVal, oldVal) {
+                    assert.ok(this.data)
                     outputs.push(`number1 change from ${oldVal} to ${newVal}`)
                 },
                 str1: function (newVal, oldVal) {
+                    assert.ok(this.data)
                     outputs.push(`str1 change from ${oldVal} to ${newVal}`)
                 }
             },
@@ -42,11 +45,13 @@ describe('watch', function () {
             },
             computed: {
                 number2: function () {
+                    assert.ok(this.data)
                     return this.data.number1 + 1;
                 }
             },
             watch: {
                 number2: function (newVal, oldVal) {
+                    assert.ok(this.data)
                     outputs.push(`number2 change from ${oldVal} to ${newVal}`)
                 }
             },
