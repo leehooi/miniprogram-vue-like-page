@@ -3,7 +3,7 @@ function notifyWatch(instance, oldData, newData) {
         return;
     }
     var propertyInfoTable = {};
-    (instance.mixins || []).map(mixin => {
+    (getApp().mixins || []).concat(instance.mixins || []).map(mixin => {
         return mixin.watch;
     }).concat([instance.watch]).forEach(watch => {
         if (!watch) {

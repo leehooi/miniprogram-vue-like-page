@@ -14,6 +14,9 @@ module.exports = function (page) {
         }
     }].concat(getApp().mixins || []).concat(page.mixins || []).forEach(mixin => {
         for (let key in mixin) {
+            if (key == 'watch' || key == 'computed') {
+                continue;
+            }
             if (ctx.lifeFnTable[key]) {
                 ctx.lifeFnTable[key].push(mixin[key]);
             }

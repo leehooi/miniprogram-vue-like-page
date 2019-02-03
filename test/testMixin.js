@@ -247,7 +247,7 @@ describe('mixin', function () {
         });
     });
     describe('global mixin', function () {
-        it('should be merged at first', () => {
+        it('should have \'lifecycle callback\' be merged at first', () => {
             var outputs = [];
             setApp({
                 mixins: [
@@ -278,6 +278,73 @@ describe('mixin', function () {
                 'global minxin onLoad|' +
                 'local minxin onLoad|' +
                 'page onLoad')
+        });
+
+        it('should have \'watch\' be merged at first', () => {
+            var outputs = [];
+            setApp({
+                mixins: [
+                    {
+                        computed: {
+                            number2: function () {
+                                return this.data.number1 + 1;
+                            }
+                        },
+                        watch: {
+                            number2: function (newVal, oldVal) {
+                                assert.ok(this.data)
+                                outputs.push(`global change from ${oldVal} to ${newVal}`)
+                            }
+                        }
+                    }]
+            })
+            var page = Page(VueLike({
+                data: {
+                    number1: 1
+                },
+                watch: {
+                    number2: function (newVal, oldVal) {
+                        assert.ok(this.data)
+                        outputs.push(`page change from ${oldVal} to ${newVal}`)
+                    }
+                }
+            }));
+            page.onLoad();
+            assert.equal(page.data.number2, 2);
+            page.setData({ number1: 2 });
+            assert.equal(page.data.number2, 3);
+
+            assert.equal(outputs.join('|'),
+                'global change from 2 to 3|' +
+                'page change from 2 to 3')
+        });
+
+        it('should have \'computed\' be overwriten by page', () => {
+            var outputs = [];
+            setApp({
+                mixins: [
+                    {
+                        computed: {
+                            number2: function () {
+                                return this.data.number1 + 1;
+                            }
+                        }
+                    }]
+            })
+            var page = Page(VueLike({
+                data: {
+                    number1: 1
+                },
+                computed: {
+                    number2: function () {
+                        return this.data.number1 + 2;
+                    }
+                }
+            }));
+            page.onLoad();
+            assert.equal(page.data.number2, 3);
+            page.setData({ number1: 2 });
+            assert.equal(page.data.number2, 4);
         });
     });
 });

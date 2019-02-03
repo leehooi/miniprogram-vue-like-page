@@ -1,6 +1,7 @@
 function update(instance, setData) {
+    //merge computed
     var computed = instance.computed;
-    (instance.mixins || []).forEach(mixin => {
+    (getApp().mixins || []).concat(instance.mixins || []).forEach(mixin => {
         if (!computed) {
             computed = mixin.computed;
         }
@@ -12,8 +13,8 @@ function update(instance, setData) {
     });
     if (computed) {
         var computedData = {};
-        for (let fn in instance.computed) {
-            computedData[fn] = instance.computed[fn].apply(instance);
+        for (let fn in computed) {
+            computedData[fn] = computed[fn].apply(instance);
         }
         setData.apply(instance, [computedData]);
     }
