@@ -33,9 +33,8 @@ module.exports = {
         var lastDataCaptureJson = JSON.stringify(instance.data);
         instance.setData = function () {
             setData.apply(this, arguments);
-            notifyWatch(this, JSON.parse(lastDataCaptureJson), arguments[0]);
+            notifyWatch(this, JSON.parse(lastDataCaptureJson), this.data);
             lastDataCaptureJson = JSON.stringify(this.data);
         }
-        lastDataCaptureJson = JSON.stringify(instance.data);
     }
 }
