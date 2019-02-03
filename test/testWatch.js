@@ -66,4 +66,62 @@ describe('watch', function () {
             'number2 change from 2 to 3|' +
             'number2 change from 3 to 4')
     });
+    it('should detect array change properly', () => {
+        var outputs = [];
+        var page = Page(VueLike({
+            data: {
+                list: []
+            },
+            watch: {
+                list: function (newVal, oldVal) {
+                    assert.ok(this.data)
+                    outputs.push(`list change from ${oldVal} to ${newVal}`)
+                }
+            },
+            onLoad: function (options) {
+                this.setData({ list: [1] })
+            }
+        }));
+        page.onLoad();
+        page.setData({ list: [1, 2] })
+        page.setData({ list: [1, 2] })
+
+        assert.equal(outputs.join('|'),
+            'list change from  to 1|' +
+            'list change from 1 to 1,2')
+    });
+    it('should detect object change properly', () => {
+        var outputs = [];
+        var page = Page(VueLike({
+            data: {
+                foo: {
+                    list: [],
+                    number1: 1
+                }
+            },
+            watch: {
+                foo: function (newVal, oldVal) {
+                    assert.ok(this.data)
+                    outputs.push(`list change from ${JSON.stringify(oldVal)} to ${JSON.stringify(newVal)}`)
+                }
+            },
+            onLoad: function (options) {
+                let {
+                    foo
+                } = this.data;
+                foo.number1 = 2;
+                this.setData({ foo })
+            }
+        }));
+        page.onLoad();
+        let {
+            foo
+        } = page.data;
+        foo.list.push(2);
+        page.setData({ foo })
+
+        assert.equal(outputs.join('|'),
+            'list change from {"list":[],"number1":1} to {"list":[],"number1":2}|' +
+            'list change from {"list":[],"number1":2} to {"list":[2],"number1":2}')
+    });
 });

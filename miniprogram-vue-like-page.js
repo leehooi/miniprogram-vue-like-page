@@ -1,16 +1,18 @@
 module.exports = function (page) {
 
     var ctx = {
+        lastDataCaptureJson: '',
         setData: null,
         lifeFnTable: ['onLoad', 'onShow', 'onReady', 'onHide', 'onUnload']
             .reduce((table, fn) => { table[fn] = []; return table; }, {}),
         watchFnTable: {},
-        notifyWatch: function (instance, oldData, newData) {
+        notifyWatch: function (instance, newData) {
             if (!newData) {
                 return;
             }
+            var oldData = JSON.parse(this.lastDataCaptureJson);
             for (let property in newData) {
-                if (oldData[property] === newData[property]) {
+                if (JSON.stringify(oldData[property]) == JSON.stringify(newData[property])) {
                     continue;
                 }
                 var watchFnList = this.watchFnTable[property];
@@ -38,14 +40,15 @@ module.exports = function (page) {
             //inject setData fn.
             ctx.setData = this.setData;
             this.setData = function () {
-                var oldDataJson = JSON.stringify(this.data);
                 ctx.setData.apply(this, arguments);
                 ctx.updateComputedProperties(this);
-                ctx.notifyWatch(this, JSON.parse(oldDataJson), this.data);
+                ctx.notifyWatch(this, this.data);
+                ctx.lastDataCaptureJson = JSON.stringify(this.data);
             }
 
             //update Computed Properties immediately
             ctx.updateComputedProperties(this);
+            ctx.lastDataCaptureJson = JSON.stringify(this.data);
         }
     }].concat(getApp().mixins || []).concat(page.mixins || []).forEach(mixin => {
         for (let key in mixin) {
