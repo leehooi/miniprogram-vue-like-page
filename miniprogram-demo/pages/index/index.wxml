@@ -1,0 +1,15 @@
+<!--index.wxml-->
+<view>
+  <view>
+    <slider id="number1" value="{{number1}}" bindchange="changePropertyById" min="1" max="20" show-value />
+  </view>
+  <view style="margin-top:50rpx">
+    <slider id="number2" value="{{number2}}" bindchange="changePropertyById" min="1" max="20" show-value />
+  </view>
+  <view style="padding:50rpx">
+    {{number1}} + {{number2}} = {{numberSum}}
+  </view>
+  <view style="padding:50rpx">
+    {{message}}
+  </view>
+</view>
