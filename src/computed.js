@@ -1,16 +1,21 @@
 function update(instance, setData) {
     //merge computed
-    var computed = instance.computed;
-    (instance.mixins || []).concat(getApp().mixins || []).forEach(mixin => {
+    var computed = [instance.computed].concat(
+        ((instance.mixins || []).concat(getApp().mixins || [])).map(mixin => {
+            return mixin.computed;
+        })
+    ).reduce((result, computed) => {
         if (!computed) {
-            computed = mixin.computed;
+            return result;
         }
-        for (let property in mixin.computed) {
-            if (!computed[property]) {
-                computed[property] = mixin.computed[property];
+        for (let property in computed) {
+            if (!result[property]) {
+                result[property] = computed[property];
             }
         }
-    });
+        return result;
+    }, {});
+    
     if (computed) {
         var computedData = {};
         for (let fn in computed) {
