@@ -1,7 +1,7 @@
 function update(instance, setData) {
     //merge computed
     var computed = instance.computed;
-    (getApp().mixins || []).concat(instance.mixins || []).forEach(mixin => {
+    (instance.mixins || []).concat(getApp().mixins || []).forEach(mixin => {
         if (!computed) {
             computed = mixin.computed;
         }

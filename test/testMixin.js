@@ -319,6 +319,36 @@ describe('mixin', function () {
                 'page change from 2 to 3')
         });
 
+        it('should have \'computed\' be overwriten by local mixin', () => {
+            setApp({
+                mixins: [
+                    {
+                        computed: {
+                            number2: function () {
+                                return this.data.number1 + 1;
+                            }
+                        }
+                    }]
+            })
+            var page = Page(VueLike({
+                data: {
+                    number1: 1
+                },
+                mixins: [
+                    {
+                        computed: {
+                            number2: function () {
+                                return this.data.number1 + 2;
+                            }
+                        }
+                    }]
+            }));
+            page.onLoad();
+            assert.equal(page.data.number2, 3);
+            page.setData({ number1: 2 });
+            assert.equal(page.data.number2, 4);
+        });
+
         it('should have \'computed\' be overwriten by page', () => {
             var outputs = [];
             setApp({
@@ -335,6 +365,14 @@ describe('mixin', function () {
                 data: {
                     number1: 1
                 },
+                mixins: [
+                    {
+                        computed: {
+                            number2: function () {
+                                return this.data.number1 + 3;
+                            }
+                        }
+                    }],
                 computed: {
                     number2: function () {
                         return this.data.number1 + 2;
