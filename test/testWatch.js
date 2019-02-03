@@ -41,7 +41,8 @@ describe('watch', function () {
         var page = Page(VueLike({
             data: {
                 notWatchedProperty: 'xxx',
-                number1: 1
+                number1: 1,
+                message: ''
             },
             computed: {
                 number2: function () {
@@ -52,6 +53,9 @@ describe('watch', function () {
             watch: {
                 number2: function (newVal, oldVal) {
                     assert.ok(this.data)
+                    this.setData({
+                        message: `number2 change from ${oldVal} to ${newVal}`
+                    });
                     outputs.push(`number2 change from ${oldVal} to ${newVal}`)
                 }
             },
@@ -64,7 +68,8 @@ describe('watch', function () {
 
         assert.equal(outputs.join('|'),
             'number2 change from 2 to 3|' +
-            'number2 change from 3 to 4')
+            'number2 change from 3 to 4');
+        assert.equal(page.data.message, 'number2 change from 3 to 4');
     });
     it('should detect array change properly', () => {
         var outputs = [];
