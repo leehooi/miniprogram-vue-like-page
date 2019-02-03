@@ -1,5 +1,5 @@
 const assert = require('assert');
-const VueLike = require('../miniprogram-vue-like-page');
+const VueLike = require('../dist/miniprogram-vue-like-page');
 describe('watch', function () {
     it('should detect data property change', () => {
         var outputs = [];

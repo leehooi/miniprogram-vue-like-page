@@ -2,9 +2,11 @@
   "name": "miniprogram-vue-like-page",
   "version": "1.1.1",
   "description": "",
-  "main": "miniprogram-vue-like-page.js",
+  "main": "./dist/miniprogram-vue-like-page.js",
   "scripts": {
-    "test": "mocha"
+    "start": "npm run build && cls && npm run test",
+    "test": "mocha",
+    "build": "webpack"
   },
   "repository": {
     "type": "git",
@@ -17,6 +19,9 @@
   },
   "homepage": "https://github.com/leehooi/miniprogram-vue-like-page#readme",
   "devDependencies": {
-    "mocha": "^5.2.0"
+    "mocha": "^5.2.0",
+    "terser": "^3.14.1",
+    "webpack": "^4.29.0",
+    "webpack-cli": "^3.2.1"
   }
 }
