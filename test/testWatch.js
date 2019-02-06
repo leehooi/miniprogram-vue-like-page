@@ -3,6 +3,7 @@ const VueLike = require('../dist/miniprogram-vue-like-page');
 describe('watch', function () {
     it('should detect data property change', () => {
         var outputs = [];
+        var outputs2 = [];
         var page = Page(VueLike({
             data: {
                 notWatchedProperty: 'xxx',
@@ -25,6 +26,10 @@ describe('watch', function () {
             },
             onLoad: function (options) {
                 this.setData({ number1: 2 })
+                this.$watch('notWatchedProperty', function (newVal, oldVal) {
+                    assert.ok(this.data)
+                    outputs2.push(`$watch: notWatchedProperty change from ${oldVal} to ${newVal}`)
+                })
             }
         }));
         page.onLoad();
@@ -34,7 +39,10 @@ describe('watch', function () {
         assert.equal(outputs.join('|'),
             'number1 change from 1 to 2|' +
             'number1 change from 2 to 3|' +
-            'str1 change from aaa to bbb')
+            'str1 change from aaa to bbb');
+        assert.equal(outputs2.join('|'),
+            '$watch: notWatchedProperty change from xxx to yyy|' +
+            '$watch: notWatchedProperty change from yyy to zzz');
     });
     it('should detect computed property change', () => {
         var outputs = [];

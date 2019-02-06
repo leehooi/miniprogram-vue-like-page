@@ -65,6 +65,18 @@ Page(VueLike({
     }
 }));
 ```
+除了 watch 选项之外，还可以使用命令式的 $watch：
+```js
+Page(VueLike({
+    data: {
+        number1: 1
+    },
+    onLoad: function (options) {
+        this.$watch('number1', function (newVal, oldVal) {
+        })
+        this.setData({ number1: 2 }) //这里会触发上面$watch里的callback方法，传入的参数newVal是2，oldVal是1
+    }
+}));
 
 ### 混入
 类似Vue的混入。所有混入对象的属性将被混入该Page本身的属性。
