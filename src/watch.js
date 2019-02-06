@@ -2,16 +2,81 @@ function notifyWatch(watchFnList, instance, oldData, newData) {
     var valuleChangedTable = {};
     watchFnList.forEach(watchFn => {
         var key = watchFn.key;
+        var oldValue = getObjectValueByKey(oldData, key);
+        if (oldValue == undefined) {
+            return;
+        }
+        var newValue = getObjectValueByKey(newData, key);
+        if (newValue == undefined) {
+            return;
+        }
         if (!valuleChangedTable[key]) {
             valuleChangedTable[key] = {
-                changed: JSON.stringify(oldData[key]) != JSON.stringify(newData[key])
+                changed: JSON.stringify(oldValue) != JSON.stringify(newValue)
             };
         }
         if (!valuleChangedTable[key].changed) {
             return;
         }
-        watchFn.callback.apply(instance, [newData[key], oldData[key]]);
+        watchFn.callback.apply(instance, [newValue, oldValue]);
     })
+}
+
+function getObjectValueByKey(obj, key) {
+    if (typeof key !== 'string') {
+        return;
+    }
+    var value = obj;
+    var regQuote = {
+        '\'': /\\\'/g,
+        '"': /\\\"/g,
+    };
+    var i = 0;
+    var iDot, iBrktStart, charQuote, iBrktEnd;
+    while (i < key.length) {
+        if (value == undefined) {
+            return undefined;
+        }
+        iDot = key.indexOf('.', i);
+        iBrktStart = key.indexOf('[', i);
+
+        // we've reached the end
+        if (iDot === -1 && iBrktStart === -1) {
+            value = value[key.slice(i, key.length)];
+            i = key.length;
+        }
+
+        // dots
+        else if (iBrktStart === -1 || (iDot !== -1 && iDot < iBrktStart)) {
+            value = value[key.slice(i, iDot)];
+            i = iDot + 1;
+        }
+
+        // brackets
+        else {
+            if (iBrktStart > i) {
+                value = value[key.slice(i, iBrktStart)];
+                i = iBrktStart;
+            }
+            charQuote = key.slice(iBrktStart + 1, iBrktStart + 2);
+            if (charQuote !== '"' && charQuote !== '\'') {
+                iBrktEnd = key.indexOf(']', iBrktStart);
+                if (iBrktEnd === -1) iBrktEnd = key.length;
+                value = value[key.slice(i + 1, iBrktEnd)];
+                i = (key.slice(iBrktEnd + 1, iBrktEnd + 2) === '.') ? iBrktEnd + 2 : iBrktEnd + 1;
+            } else {
+                iBrktEnd = key.indexOf(charQuote + ']', iBrktStart);
+                if (iBrktEnd === -1) iBrktEnd = key.length;
+                while (key.slice(iBrktEnd - 1, iBrktEnd) === '\\' && iBrktStart < key.length) {
+                    iBrktStart++;
+                    iBrktEnd = key.indexOf(charQuote + ']', iBrktStart);
+                }
+                value = value[key.slice(i + 2, iBrktEnd).replace(regQuote[charQuote], charQuote)];
+                i = (key.slice(iBrktEnd + 2, iBrktEnd + 3) === '.') ? iBrktEnd + 3 : iBrktEnd + 2;
+            }
+        }
+    }
+    return value;
 }
 
 function getWatchFnList(instance) {

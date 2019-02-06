@@ -44,6 +44,41 @@ describe('watch', function () {
             '$watch: notWatchedProperty change from xxx to yyy|' +
             '$watch: notWatchedProperty change from yyy to zzz');
     });
+    it('should detect complex data property change', () => {
+        var outputs = [];
+        var page = Page(VueLike({
+            data: {
+                foo: {
+                    list: [
+                        1, 2, 3
+                    ]
+                }
+            },
+            watch: {
+                "foo.list[1]": function (newVal, oldVal) {
+                    assert.ok(this.data)
+                    outputs.push(`complex property change from ${oldVal} to ${newVal}`)
+                }
+            },
+            onLoad: function (options) {
+                let {
+                    foo
+                } = this.data;
+                foo.list[1] = 6;
+                this.setData({ foo });
+            }
+        }));
+        page.onLoad();
+        
+        let {
+            foo
+        } = page.data;
+        foo.list[2] = 7;
+        page.setData({ foo });
+
+        assert.equal(outputs.join('|'),
+            'complex property change from 2 to 6');
+    });
     it('should detect computed property change', () => {
         var outputs = [];
         var page = Page(VueLike({
