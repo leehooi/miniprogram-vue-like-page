@@ -77,6 +77,7 @@ Page(VueLike({
         this.setData({ number1: 2 }) //这里会触发上面$watch里的callback方法，传入的参数newVal是2，oldVal是1
     }
 }));
+```
 
 ### 混入
 类似Vue的混入。所有混入对象的属性将被混入该Page本身的属性。
