@@ -100,18 +100,18 @@ function getWatchFnList(instance) {
 }
 
 module.exports = {
-    enable: (instance) => {
-        var watchFnList = getWatchFnList(instance);
-        var setData = instance.setData;
-        var lastDataCaptureJson = JSON.stringify(instance.data);
-        instance.setData = function () {
+    onLoad: function () {
+        var watchFnList = getWatchFnList(this);
+        var setData = this.setData;
+        var lastDataCaptureJson = JSON.stringify(this.data);
+        this.setData = function () {
             setData.apply(this, arguments);
             var oldData = JSON.parse(lastDataCaptureJson);
             lastDataCaptureJson = JSON.stringify(this.data);
             notifyWatch(watchFnList, this, oldData, this.data);
         }
 
-        instance.$watch = function (key, callback) {
+        this.$watch = function (key, callback) {
             watchFnList.push({ key, callback })
         }
     }

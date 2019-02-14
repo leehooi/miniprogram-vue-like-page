@@ -26,12 +26,12 @@ function update(instance, setData) {
 }
 
 module.exports = {
-    enable: (instance) => {
-        var setData = instance.setData;
-        instance.setData = function () {
+    onLoad: function () {
+        var setData = this.setData;
+        this.setData = function () {
             setData.apply(this, arguments);
-            update(instance, setData);
+            update(this, setData);
         }
-        update(instance, setData);
+        update(this, setData);
     }
 }

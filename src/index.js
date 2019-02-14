@@ -4,12 +4,10 @@ const watch = require('./watch');
 
 module.exports = function (page) {
 
-    mixin.enable(page, [{
-        onLoad: function () {
-            computed.enable(this);
-            watch.enable(this);
-        }
-    }].concat(getApp().mixins || []).concat(page.mixins || []));
+    mixin.enable(page,
+        [computed, watch]
+            .concat(getApp().mixins || [])
+            .concat(page.mixins || []));
 
     return page;
 }
