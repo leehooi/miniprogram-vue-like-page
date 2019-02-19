@@ -17,11 +17,11 @@ function update(instance, setData) {
     }, {});
     
     if (computed) {
-        var computedData = {};
         for (let fn in computed) {
+            var computedData = {};
             computedData[fn] = computed[fn].apply(instance);
+            setData.apply(instance, [computedData]);
         }
-        setData.apply(instance, [computedData]);
     }
 }
 
