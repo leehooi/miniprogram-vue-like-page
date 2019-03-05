@@ -103,12 +103,12 @@ module.exports = {
     onLoad: function () {
         var watchFnList = getWatchFnList(this);
         var setData = this.setData;
-        var lastDataCaptureJson = JSON.stringify(this.data);
+        var dataCaptureJson = JSON.stringify(this.data);
         this.setData = function () {
             setData.apply(this, arguments);
-            var oldData = JSON.parse(lastDataCaptureJson);
-            lastDataCaptureJson = JSON.stringify(this.data);
-            notifyWatch(watchFnList, this, oldData, this.data);
+            var oldData = JSON.parse(dataCaptureJson);
+            dataCaptureJson = JSON.stringify(this.data);
+            notifyWatch(watchFnList, this, oldData, JSON.parse(dataCaptureJson));
         }
 
         this.$watch = function (key, callback) {

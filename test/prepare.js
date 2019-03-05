@@ -15,3 +15,8 @@ before(function () {
         return page;
     }
 });
+
+afterEach(function () {
+    //reset app
+    setApp({});
+});

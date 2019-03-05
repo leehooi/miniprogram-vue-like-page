@@ -172,4 +172,33 @@ describe('watch', function () {
             'list change from {"list":[],"number1":1} to {"list":[],"number1":2}|' +
             'list change from {"list":[],"number1":2} to {"list":[2],"number1":2}')
     });
+
+    it('should detect object change properly when setData inside watch', () => {
+        var outputs = [];
+        var page = Page(VueLike({
+            data: {
+                number1: 10,
+                number2: 20
+            },
+            watch: {
+                number1: function (newVal, oldVal) {
+                    outputs.push(`number1 change from ${oldVal} to ${newVal}`)
+                    let {
+                        number2
+                    } = this.data;
+                    number2++;
+                    this.setData({ number2 });
+                },
+                number2: function (newVal, oldVal) {
+                    outputs.push(`number2 change from ${oldVal} to ${newVal}`)
+                }
+            }
+        }));
+        page.onLoad();
+        page.setData({ number1: 11 })
+
+        assert.equal(outputs.join('|'),
+            'number1 change from 10 to 11|' +
+            'number2 change from 20 to 21')
+    })
 });
